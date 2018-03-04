@@ -12,6 +12,7 @@ var PostSchema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now},
     _creator: { type: Schema.ObjectId, ref: 'User'},
     productImage: String,
+    productImage2: String,
     // _comments: [{ type: Schema.ObjectId, ref: 'Comment'}]
 })
 

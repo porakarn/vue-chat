@@ -11,31 +11,31 @@ var Comment = require('../Models/comment');
 var Test = require('../Models/test');
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './uploads/');
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, file.originalname);
+//     }
+// });
 
-const fileFilter = (req, file, cb) => {
-    // reject a file
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
+// const fileFilter = (req, file, cb) => {
+//     // reject a file
+//     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+//         cb(null, true);
+//     } else {
+//         cb(null, false);
+//     }
+// };
 
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 5
-    },
-    fileFilter: fileFilter
-});
+// const upload = multer({
+//     storage: storage,
+//     limits: {
+//         fileSize: 1024 * 1024 * 5
+//     },
+//     fileFilter: fileFilter
+// });
 
 
 
@@ -160,15 +160,24 @@ router.get('/jobs', function(req,res){
 // creator
 
 
-
-router.post('/posts', upload.single('productImage') ,function(req,res,next){
+router.post('/posts', function (req, res, next) {
     const {
-         title, 
-         text, 
-         link, 
-         userId,
+         title,
+        text,
+        link,
+        userId,
         productImage,
+        productImage2,
         } = req.body
+
+// router.post('/posts', upload.single('productImage') ,function(req,res,next){
+//     const {
+//          title, 
+//          text, 
+//          link, 
+//          userId,
+//         productImage,
+//         } = req.body
 
 
 const post = new Post({
@@ -176,7 +185,8 @@ const post = new Post({
     text,
     link,
     _creator: userId,
-    productImage: req.file.path,
+    productImage,
+    productImage2,
 
 })
 
@@ -205,6 +215,18 @@ router.get('/posts', function(req,res){
       })
 
      
+
+router.get('/posts/:id', function (req, res) {
+    Post.findById(req.params.id).populate({
+        path: '_creator'
+        
+    }).then((posts) => {
+        res.json(posts)
+    }).catch((err) => {
+        res.send(err)
+    })
+
+})
  
 
 
