@@ -17,11 +17,11 @@ app.use(cors())
 
 const index = require('./Routes/index');
 var auth = require('./Routes/auth');
-var socket = require('./Routes/socket');
+
 
 app.use('/', index);
 app.use('/auth', auth);
-app.use('/', socket );
+
 
 mongoose.connect('mongodb://localhost/porvue');
 
