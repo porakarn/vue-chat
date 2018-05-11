@@ -17,7 +17,15 @@ var UserSchema = mongoose.Schema({
   }
 }, {
   timestamps: true
-});
+},
+facebook: {
+  id: String,
+  token: String,
+  email: String,
+  name: String
+}
+
+);
 
 
 /**
