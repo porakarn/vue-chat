@@ -16,24 +16,31 @@ function generateToken(user) {
 
 
 
-router.post('/signup', AuthPolicy.register, function (req, res, next) {
+router.post('/signup', function (req, res, next) {
 
     const user = new User({
-        username: req.body.username,
-        password: req.body.password
+        username: req.body.name,
+        email: req.body.email,
+        picture: req.body.picture
     });
 
-    User.findOne({ username: req.body.username }, (err, existingUser) => {
+    User.findOne({ username: req.body.name }, (err, existingUser) => {
         if (err) { return next(err); }
         // Check if email is avaible
         if (existingUser) {
             // Save error message
-            const errors = [];
-            errors.push({
-                error: 'Email exists'
-            });
+            // const errors = [];
+            // errors.push({
+            //     error: 'Email exists'
+            // });
 
-            return res.status(400).send({ errors });
+            // return res.status(400).send({ errors });
+            console.log('login')
+            return res.send({
+                user: existingUser.toJSON(),
+                token: generateToken(existingUser.toJSON())
+            });
+              user.update(req.body)
         }
         user.save((err) => {
             if (err) { return next(err); }
@@ -54,7 +61,7 @@ router.post('/signup', AuthPolicy.register, function (req, res, next) {
  * Login method
  */
 router.post('/login', function (req, res, next) {
-    User.findOne({ username: req.body.username }, (err, existingUser) => {
+    User.findOne({ username: req.body.name }, (err, existingUser) => {
         if (err) { return next(err); }
         // Check if user exists
         const errors = [];
